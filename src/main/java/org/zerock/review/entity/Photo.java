@@ -14,10 +14,16 @@ public class Photo{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long photoNum;
+    private Long pnum;
 
     private String fileName;
 
+    private String uploadPath;
+
+    private String uuid;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Review review;
+
+
 }
