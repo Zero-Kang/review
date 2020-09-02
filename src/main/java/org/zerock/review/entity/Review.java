@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -25,13 +26,24 @@ public class Review extends BaseEntity {
 
     private String content;
 
-    @OneToMany(mappedBy = "review" , cascade = CascadeType.ALL)
-    private Collection<Photo> photos;
+    @OneToMany(mappedBy = "review" ,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true)
+    private Set<Photo> photos;
 
     public void addPhoto(Photo photo){
         if(photos == null){
             photos = new HashSet<>();
         }
         photos.add(photo);
+    }
+
+    public void deletePhoto(Photo photo){
+
+        photos = photos.stream()
+                .filter( p -> !p.getPnum().equals(photo.getPnum()))
+                .collect(Collectors.toSet());
+
     }
 }
