@@ -6,15 +6,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.review.entity.Photo;
 import org.zerock.review.entity.Review;
 
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -45,7 +42,7 @@ public class ReviewAndPhotoTests {
 
     @Test
     public void insertWithParent() {
-        Review review = Review.builder().title("Test").content("Content").build();
+        Review review = Review.builder().title("Test").content("Content").photos(new HashSet<>()).build();
 
         IntStream.rangeClosed(1, 3).forEach(i -> {
             Photo photo = Photo.builder().fileName("test1.jpg").review(review).build();
@@ -61,7 +58,7 @@ public class ReviewAndPhotoTests {
 
         IntStream.rangeClosed(1,100).forEach(i -> {
 
-            Review review = Review.builder().title("Test..."+i).content("Content..." + i).build();
+            Review review = Review.builder().title("Test..."+i).content("Content..." + i).photos(new HashSet<>()).build();
 
             IntStream.rangeClosed(1, 3).forEach(num -> {
                 Photo photo = Photo.builder().fileName("test1.jpg").review(review).build();
@@ -127,7 +124,7 @@ public class ReviewAndPhotoTests {
 
     }
 
-    @Transactional
+
     @Test
     public void testEntityGraphPaging() {
 
@@ -144,48 +141,33 @@ public class ReviewAndPhotoTests {
         });
     }
 
-
     @Test
-    public void deletePhotoChild(){
+    public void deleteReview(){
 
-        //Review객체를 가져온다
-        Review review = reviewRepository.findByRnum(100L).get();
+        reviewRepository.deleteById(3L);
 
-        //삭제 전
-        System.out.println("Before Delete........");
-        System.out.println(review.getPhotos());
-
-        //Photo객체의 삭제
-        photoRepository.deleteById(299L);
-
-        //삭제후 다시 조회 - Review 객체의 메모리 상에서는 삭제가 되지 않음
-        System.out.println("After Delete........");
-
-        System.out.println(review.getPhotos());
     }
 
     @Test
-    public void deletePhotoSuper(){
+    public void deletePhoto() {
 
-        //Review객체를 가져온다
         Review review = reviewRepository.findByRnum(2L).get();
 
-        //삭제 전
-        System.out.println("Before Delete........");
+        System.out.println("Before...................");
+        System.out.println(review);
         System.out.println(review.getPhotos());
-
-        //Photo객체의 삭제
 
         Photo photo = Photo.builder().pnum(5L).build();
-
         review.deletePhoto(photo);
-        //Photo객체의 삭제없이 바로 Review반영
+
         reviewRepository.save(review);
 
-        //삭제후 다시 조회 - 삭제
-        System.out.println("After Delete........");
+        System.out.println("After...................");
+        System.out.println(review);
         System.out.println(review.getPhotos());
-
     }
+
+
+
 
 }

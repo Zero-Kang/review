@@ -25,8 +25,9 @@ public class Photo{
     private String uuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Review review;
 
-
+    public void makeInvalid(){
+        this.review = null;
+    }
 }
