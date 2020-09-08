@@ -16,6 +16,8 @@ public interface ReviewService {
 
     PageResultDTO<ReviewDTO,Review> getList(PageRequestDTO pageRequestDTO);
 
+    ReviewDTO get(Long rnum);
+
     default Review dtoToEntity(ReviewDTO reviewDTO){
 
         Review review = Review.builder()

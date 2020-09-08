@@ -13,6 +13,7 @@ import org.zerock.review.dto.ReviewDTO;
 import org.zerock.review.entity.Review;
 import org.zerock.review.repository.ReviewRepository;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -47,4 +48,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     }
 
+    @Override
+    public ReviewDTO get(Long rnum) {
+        Optional<Review> result = reviewRepository.findByRnum(rnum);
+
+        if(result.isPresent()){
+            return entityToDTO(result.get());
+        }
+        return null;
+    }
 }

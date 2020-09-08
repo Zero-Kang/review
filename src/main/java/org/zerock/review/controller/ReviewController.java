@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -50,6 +51,19 @@ public class ReviewController {
         PageResultDTO<ReviewDTO, Review> result = reviewService.getList(pageRequestDTO);
 
         model.addAttribute("result", result);
+
+    }
+
+    @GetMapping("/read")
+    public void read(Long rnum,
+                     @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO,
+                     Model model){
+
+        log.info("read rnum:  " + rnum);
+
+        ReviewDTO reviewDTO = reviewService.get(rnum);
+
+        model.addAttribute("dto",reviewDTO );
 
     }
 
