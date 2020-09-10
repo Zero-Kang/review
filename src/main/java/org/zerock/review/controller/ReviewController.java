@@ -54,7 +54,7 @@ public class ReviewController {
 
     }
 
-    @GetMapping("/read")
+    @GetMapping(value = {"/read","/modify"})
     public void read(Long rnum,
                      @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO,
                      Model model){
@@ -65,6 +65,19 @@ public class ReviewController {
 
         model.addAttribute("dto",reviewDTO );
 
+    }
+
+    @PostMapping("/remove")
+    public String remove(Long rnum, RedirectAttributes redirectAttributes){
+
+        log.info("remove: " + rnum);
+
+        reviewService.remove(rnum);
+
+        redirectAttributes.addFlashAttribute("msg","removed");
+
+
+        return "redirect:/review/list";
     }
 
 }

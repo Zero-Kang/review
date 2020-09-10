@@ -57,4 +57,27 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return null;
     }
+
+
+    @Override
+    public void remove(Long rnum) {
+
+        log.info("remove " + rnum);
+
+        reviewRepository.deleteById(rnum);
+
+    }
+
+    @Override
+    public Long modify(ReviewDTO reviewDTO) {
+
+        Review review = dtoToEntity(reviewDTO);
+
+        log.info("===================================");
+        log.info(review);
+
+        reviewRepository.save(review);
+
+        return review.getRnum();
+    }
 }

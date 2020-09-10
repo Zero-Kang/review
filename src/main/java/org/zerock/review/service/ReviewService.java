@@ -18,6 +18,10 @@ public interface ReviewService {
 
     ReviewDTO get(Long rnum);
 
+    void remove(Long rnum);
+
+    Long modify(ReviewDTO reviewDTO);
+
     default Review dtoToEntity(ReviewDTO reviewDTO){
 
         Review review = Review.builder()

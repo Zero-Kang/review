@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+  <th:block th:fragment="content">
+
+    <h1 class="mt-4">Review Modify Page</h1>
+
+    <form th:action="@{/review/modify}" th:method="post"  >
+      <input type="hidden" name="page" th:value="${requestDTO.page}">
+      <div class="form-group">
+        <label >Rnum</label>
+        <input type="text" class="form-control" name="rnum" th:value="${dto.rnum}" readonly >
+      </div>
+
+      <div class="form-group">
+        <label >Title</label>
+        <input type="text" class="form-control" name="title" th:value="${dto.title}" >
+      </div>
+      <div class="form-group">
+        <label >Content</label>
+        <textarea class="form-control" rows="5" name="content">[[${dto.content}]]</textarea>
+        <div class="custom-file">
+          <input type="file"  class="custom-file-input files" id="fileInput" multiple>
+          <label class="custom-file-label" data-browse="Browse">Photo</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label >RegDate</label>
+        <input type="text" class="form-control"
+               th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+      </div>
+      <div class="form-group">
+        <label >ModDate</label>
+        <input type="text" class="form-control"
+               th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+      </div>
+
+      <a th:href="@{/review/list(page=${requestDTO.page})}">
+        <button type="button" class="btn btn-info">List</button>
+      </a>
+      <button type="button" class="btn btn-primary">Modify</button>
+      <button type="button" class="btn btn-danger">Delete</button>
+
+    </form>
+
+    <style>
+        .uploadResult {
+            width: 100%;
+            background-color: gray;
+            margin-top: 10px;
+        }
+
+        .uploadResult ul {
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+            vertical-align: top;
+
+        }
+
+        .uploadResult ul li {
+            list-style: none;
+            padding: 10px;
+            margin-left: 2em;
+        }
+
+        .uploadResult ul li img {
+            width: 100px;
+        }
+    </style>
+
+    <div class="uploadResult" >
+      <ul >
+        <li th:if="${dto.photos}" th:each="photo: ${dto.photos}" th:data-path="${photo.uploadPath}"
+            th:data-uuid="${photo.uuid}"
+            th:data-filename="${photo.fileName}"
+            th:data-pnum="${photo.pnum}">
+          <div>
+            <button type='button' data-file="" class='btn-warning btn-sm'>X</button><br>
+            <img th:src=|/display?fileName=${photo.getThumbnailURL()}|>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+
+
+    <script th:inline="javascript">
+    $(document).ready(function() {
+
+        console.log("...................1")
+
+      $('form .btn-danger').click(function (e) {
+
+          e.preventDefault();
+
+          console.log("................")
+
+          if (confirm("삭제하시겠습니까?")) {
+
+              $("form").attr("action", "/review/remove").submit();
+
+              return;
+
+          }
+
+          return false;
+      });
+    });
+  </script>
+
+    </th:block>
+
+</th:block>
