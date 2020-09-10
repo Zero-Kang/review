@@ -80,6 +80,22 @@ public class ReviewController {
         return "redirect:/review/list";
     }
 
+
+    @PostMapping("/modify")
+    public String modifyPost(ReviewDTO reviewDTO,
+                             PageRequestDTO pageRequestDTO,
+                             RedirectAttributes redirectAttributes){
+
+        log.info("modify post reviewDTO: " + reviewDTO);
+
+        Long rnum = reviewService.modify(reviewDTO);
+
+        redirectAttributes.addAttribute("rnum", rnum);
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+
+        return "redirect:/review/read";
+    }
+
 }
 
 
